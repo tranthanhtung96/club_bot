@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -141,4 +142,24 @@ func SaveFile(path string, name string, data []byte) error {
 	}
 	defer out.Close()
 	return nil
+}
+
+// PostResult reads phrases.txt and creat a post to the channel
+func PostResult() {
+	_, curGoFile, _, _ := runtime.Caller(0)
+	curDir := path.Dir(curGoFile)
+	if phrasesFile, phrasesErr := os.OpenFile(curDir+"/phrases.txt", os.O_RDONLY, 0777); phrasesErr != nil {
+		println("Read the phrases.txt unsuccessfully")
+	} else {
+		defer phrasesFile.Close()
+		bytes, _ := ioutil.ReadAll(phrasesFile)
+
+		post := &model.Post{}
+		post.ChannelId = ChannelID
+		post.Message = string(bytes)
+
+		if _, resp := client.CreatePost(post); resp.Error != nil {
+			println("Post to the group 's channel unsuccessfully")
+		}
+	}
 }
