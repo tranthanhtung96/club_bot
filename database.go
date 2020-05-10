@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 // ClubMems is the number of the english club members
@@ -39,6 +41,8 @@ func DBLoadFromFile() {
 func DBCheckOff() {
 	// _, curGoFile, _, _ := runtime.Caller(0)
 	// curDir := path.Dir(curGoFile)
+	offList := ""
+
 	for _, mem := range DBEngClub {
 		chkFolder := resDir + mem.ID
 		_, err := os.Stat(chkFolder)
@@ -46,6 +50,7 @@ func DBCheckOff() {
 
 		if os.IsNotExist(err) || len(files) < 2 {
 			println("name: " + mem.Username + "\tid: " + mem.ID)
+			offList += mem.Username + ", "
 		} else {
 			txtExist := false
 			for _, file := range files {
@@ -56,7 +61,15 @@ func DBCheckOff() {
 			}
 			if !txtExist {
 				println("name: " + mem.Username + "\tid: " + mem.ID)
+				offList += mem.Username
 			}
 		}
+	}
+
+	post := &model.Post{}
+	post.ChannelId = AdminID
+	post.Message = offList
+	if _, resp := client.CreatePost(post); resp.Error != nil {
+		println("Post to the group 's channel unsuccessfully")
 	}
 }

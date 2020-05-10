@@ -25,8 +25,8 @@ const (
 	ServerAddr = "https://chat.ginno.com"
 	// ChannelID is the id of the club channel
 	ChannelID = "rz7c6rzkpi84jgi6ywbt7it35r"
-
-	// layoutISO = "2006-01-02"
+	// AdminID is the id of admin 's chat channel
+	AdminID = "k3otob78efn5zeg936fhfoqsce"
 )
 
 var client *model.Client4

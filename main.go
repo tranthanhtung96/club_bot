@@ -5,4 +5,5 @@ func main() {
 	GetDailyPosts()
 	DBLoadFromFile()
 	PostResult()
+	DBCheckOff()
 }
