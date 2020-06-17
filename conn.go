@@ -53,7 +53,7 @@ func GetDailyPosts() {
 	loc, _ := time.LoadLocation("Asia/Saigon")
 	year, month, day := time.Now().Date()
 	todayEpoch := time.Date(year, month, day, 0, 0, 0, 0, loc).Unix() * 1000
-	// todayEpoch := int64(1588698000000)
+	// todayEpoch := time.Date(2020, 6, 6, 1, 0, 0, 0, loc).Unix() * 1000
 	yesterdayEpoch := todayEpoch - 86400000
 
 	if posts, resp := client.GetPostsSince(ChannelID, yesterdayEpoch); resp.Error != nil {
